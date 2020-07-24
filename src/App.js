@@ -4,6 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
+
+  const forecast = ['w', 'w', 'w', 's', 'w']
+
   return (
     <div className="App container">
       <nav className="navbar navbar-light bg-light">
@@ -14,8 +17,18 @@ function App() {
       </nav>
       <div className="text-center pt-2"><h2>24 Australian Forecast</h2></div>
       
-
-        <div className="pt-5">
+      <div>
+        {forecast.map((value) => {
+          if (value === 'w'){
+            return <span>🌊</span>;
+          } else if (value === 's'){
+            return <span>☀</span>
+          }
+          
+        })}
+        </div>
+        
+        {/* <div className="pt-5">
           <p>🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊</p>
           <p>🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊☀🌊🌊🌊🌊🌊🌊</p>
           <p>🌊🌊🌊🌊🌊🌊☀☀🌊🌊🌊🌊🌊☀☀🌊🌊🌊🌊🌊</p>
@@ -30,7 +43,7 @@ function App() {
           <p>🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊</p>
           <p>🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊☀🌊🌊🌊🌊🌊🌊</p>
           <p>🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊</p>
-        </div>
+        </div> */}
       </div>
    
   );
