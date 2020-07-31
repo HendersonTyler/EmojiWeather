@@ -30,18 +30,18 @@ function App() {
             ⛈ Emoji Forecast    
         </a>
       </nav>
-      <div className="text-center pt-2"><h2>24 Australian Forecast</h2></div>
+      <div className="text-center pt-2"><h2>Tomorrow Forecast</h2></div>
       
       {forecast ? (
         <div>
           {forecast.map((value) => {
-            if (value.result === 'w'){
-              return <a id="wave" href="http://google.com">🌊</a>;
-            } else if (value.result === 's'){
-              return <span>☀</span>
+            if (value.result === 'error'){
+              return <a id="error" href="http://google.com">👎</a>;
             } else if (value.result === 'b'){
               return <p></p>
-            }
+            } else {
+              return value.result
+            } 
             
           })}
         </div>
