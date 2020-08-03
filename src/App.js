@@ -35,9 +35,7 @@ function App() {
       {forecast ? (
         <div>
           {forecast.map((value) => {
-            if (value.result === 'error'){
-              return <a id="error" href="http://google.com">👎</a>;
-            } else if (value.result === 'b'){
+            if (value.result === 'b'){
               return <p></p>
             } else {
               return value.result
