@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CLOUDS from 'vanta/dist/vanta.fog.min';
 import * as THREE from 'three';
+import { Tab, Tabs } from 'react-bootstrap'
 
 
 
@@ -48,34 +49,53 @@ const App = () => {
   // const forecast = [{"_id":"5f20b82d1e62111674862b55","location":0,"place":"","result":"w"},{"_id":"5f20b8596fce7588f46c8a80","location":1,"place":"","result":"w"},{"_id":"5f20b8826fce7588f46c8a81","location":2,"place":"","result":"w"},{"_id":"5f20b89e6fce7588f46c8a82","location":3,"place":"QCL091","result":"s"},{"_id":"5f20b8c66fce7588f46c8a83","location":4,"place":"","result":"w"}];
 
   return (
-    <div ref={myRef}>
-      <div className="container vh-100">
-        <nav className="navbar navbar-light bg-light">
+    <div className="overflowauto" ref={myRef}>
+      <div className="container overflowauto w-100 vh-100">
+        <nav className="navbar navbar-light">
           <a className="navbar-brand" href="#">
             <img src="/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" className="d-inline-block align-top" alt="" loading="lazy" />
               ⛈ Emoji Forecast    
           </a>
         </nav>
-        <div className="text-center pt-2"><h2>Australian Forecast</h2></div>
+        <div className="text-center pb-5"><h1 className=" display-1">Australia</h1></div>
+
+        <div className="">
+          <Tabs defaultActiveKey="today" id="forecast-time">
+            <Tab eventKey="today" title="Rest of Today">
+              {forecast ? (
+                <div className="transparent card text-center pt-4 pb-3 keepsize">
+                  {forecast.map((value) => {
+                    if (value.result === 'b'){
+                      return <p></p>
+                    } else {
+                      return value.result
+                    } 
+                    
+                  })}
+                </div>
+              ) : (
+                <div>
+                  <p>Loading...</p>
+                </div>
+              )}
+            </Tab>
+            <Tab eventKey="24hr" title="24hr">
+            <div className="transparent card text-center pt-4 pb-3 keepsize">
+              Hi
+              </div>
+            </Tab>
+            <Tab eventKey="48hr" title="48hr">
+            <div className="transparent card text-center pt-4 pb-3 keepsize">
+              Hello
+              </div>
+            </Tab>
+          </Tabs>
         
-        {forecast ? (
-          <div className="card text-center">
-            {forecast.map((value) => {
-              if (value.result === 'b'){
-                return <p></p>
-              } else {
-                return value.result
-              } 
-              
-            })}
-          </div>
-        ) : (
-          <div>
-            <p>Loading...</p>
-          </div>
-        )}
+        </div>
+        
           
         </div>
+        
       </div>   
   );
 }
