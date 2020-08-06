@@ -33,6 +33,11 @@ body {
   min-width: 35em !important;
 }
 
+.noBreak{
+  display: contents;
+  padding-right: 0;
+}
+
 .overflowauto {
   overflow: auto;
 }

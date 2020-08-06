@@ -59,42 +59,76 @@ const App = () => {
         </nav>
         <div className="text-center pb-5"><h1 className=" display-1">Australia</h1></div>
 
-        <div className="">
-          <Tabs defaultActiveKey="today" id="forecast-time">
-            <Tab eventKey="today" title="Rest of Today">
-              {forecast ? (
+
+        <div className="row justify-content-md-center">
+          <div className="col col-lg-2">
+            
+          </div>
+          <div className="col-md-auto">
+            {forecast ? (
+              <Tabs defaultActiveKey="today" id="forecast-time">
+                <Tab eventKey="today" title="Rest of Today">
+                  <div className="transparent card text-center pt-4 pb-3 keepsize">
+                    {forecast.map((value) => {
+                      if (value.result === 'b'){
+                        return <p></p>
+                      } else if (value.result === '🌊'){
+                        return <a className="noBreak" title='wave'> {value.result} </a>
+                      } else {
+                        return <a className="noBreak" title={value.address}> {value.now} </a>
+                      }
+                    })}
+                  </div>
+                </Tab>
+                <Tab eventKey="24hr" title="24hr">
                 <div className="transparent card text-center pt-4 pb-3 keepsize">
-                  {forecast.map((value) => {
-                    if (value.result === 'b'){
-                      return <p></p>
-                    } else {
-                      return value.result
-                    } 
-                    
-                  })}
-                </div>
+                {forecast.map((value) => {
+                      if (value.result === 'b'){
+                        return <p></p>
+                      } else if (value.result === '🌊'){
+                        return <a className="noBreak" title='wave'> {value.result} </a>
+                      } else {
+                        return <a className="noBreak" title={value.address}> {value.twenty} </a>
+                      }
+                    })}
+                  </div>
+                </Tab>
+                <Tab eventKey="48hr" title="48hr">
+                <div className="transparent card text-center pt-4 pb-3 keepsize">
+                {forecast.map((value) => {
+                      if (value.result === 'b'){
+                        return <p></p>
+                      } else if (value.result === '🌊'){
+                        return <a className="noBreak" title='wave'> {value.result} </a>
+                      } else {
+                        return <a className="noBreak" title={value.address}> {value.forty} </a>
+                      }
+                    })}
+                  </div>
+                </Tab>
+              </Tabs>
               ) : (
                 <div>
                   <p>Loading...</p>
                 </div>
               )}
-            </Tab>
-            <Tab eventKey="24hr" title="24hr">
-            <div className="transparent card text-center pt-4 pb-3 keepsize">
-              Hi
-              </div>
-            </Tab>
-            <Tab eventKey="48hr" title="48hr">
-            <div className="transparent card text-center pt-4 pb-3 keepsize">
-              Hello
-              </div>
-            </Tab>
-          </Tabs>
+          </div>
+          <div className="col col-lg-2">
+            
+          </div>
+        </div>
+
+
+
+
+
+        
+         
         
         </div>
         
           
-        </div>
+  
         
       </div>   
   );
