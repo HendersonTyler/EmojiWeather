@@ -27,7 +27,7 @@ const App = () => {
 
     if (!vantaEffect) {
       setVantaEffect(CLOUDS({
-        el: myRef.current,mouseControls: true,
+        el: myRef.current,
         mouseControls: true,
         touchControls: true,
         minHeight: 200.00,
@@ -52,10 +52,10 @@ const App = () => {
     <div className="overflowauto" ref={myRef}>
       <div className="container overflowauto w-100 vh-100">
         <nav className="navbar navbar-light">
-          <a className="navbar-brand" href="#">
+          <div className="navbar-brand">
             <img src="/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" className="d-inline-block align-top" alt="" loading="lazy" />
               ⛈ Emoji Forecast    
-          </a>
+              </div>
         </nav>
         <div className="text-center pb-5"><h1 className=" display-1">Australia</h1></div>
 
@@ -73,9 +73,9 @@ const App = () => {
                       if (value.result === 'b'){
                         return <p></p>
                       } else if (value.result === '🌊'){
-                        return <a className="noBreak" title='wave'> {value.result} </a>
+                        return <div className="noBreak" title='wave'> {value.result} </div>
                       } else {
-                        return <a className="noBreak" title={value.address}> {value.now} </a>
+                        return <div className="noBreak" title={value.address}> {value.now} </div>
                       }
                     })}
                   </div>
@@ -86,9 +86,9 @@ const App = () => {
                       if (value.result === 'b'){
                         return <p></p>
                       } else if (value.result === '🌊'){
-                        return <a className="noBreak" title='wave'> {value.result} </a>
+                        return <div className="noBreak" title='wave'> {value.result} </div>
                       } else {
-                        return <a className="noBreak" title={value.address}> {value.twenty} </a>
+                        return <div className="noBreak" title={value.address}> {value.twenty} </div>
                       }
                     })}
                   </div>
@@ -99,9 +99,9 @@ const App = () => {
                       if (value.result === 'b'){
                         return <p></p>
                       } else if (value.result === '🌊'){
-                        return <a className="noBreak" title='wave'> {value.result} </a>
+                        return <div className="noBreak" title='wave'> {value.result} </div>
                       } else {
-                        return <a className="noBreak" title={value.address}> {value.forty} </a>
+                        return <div className="noBreak" title={value.address}> {value.forty} </div>
                       }
                     })}
                   </div>
