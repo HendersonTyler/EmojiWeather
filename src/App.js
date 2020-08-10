@@ -53,7 +53,6 @@ const App = () => {
       <div className="container overflowauto w-100 vh-100">
         <nav className="navbar navbar-light">
           <div className="navbar-brand">
-            <img src="/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" className="d-inline-block align-top" alt="" loading="lazy" />
               ⛈ Emoji Forecast    
               </div>
         </nav>
