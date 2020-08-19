@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {XYPlot, VerticalBarSeries, LabelSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxis} from 'react-vis';
-
+import {XYPlot, VerticalBarSeries, LabelSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxis, LineSeries} from 'react-vis';
+import 'react-vis/dist/style.css';
 
 const Location = props => {
     const city = props.city;
@@ -105,6 +105,27 @@ const Location = props => {
                         <YAxis />
                         <VerticalBarSeries data={myData} />
                         <LabelSeries />
+                    </XYPlot>
+                    </div>
+
+                    <div className="text-center pt-4"><h2>🌡</h2></div>
+
+                    <div>
+
+                    <XYPlot width={300} height={300}>
+                        <VerticalGridLines />
+                        <HorizontalGridLines />
+                        <XAxis />
+                        <YAxis />
+                        <LineSeries
+                            style={{
+                            strokeWidth: '3px'
+                            }}
+                            lineStyle={{stroke: 'red'}}
+                            markStyle={{stroke: 'blue'}}
+                            data={[{x: 1, y: 10}, {x: 2, y: 5}, {x: 3, y: 15}]}
+                        />
+                       
                     </XYPlot>
                     </div>
 
