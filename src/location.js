@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {XYPlot, VerticalBarSeries, LabelSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxis, LineSeries} from 'react-vis';
 import 'react-vis/dist/style.css';
 
+
 const Location = props => {
     const city = props.city;
     const [forecast, setForecast] = useState();
@@ -30,7 +31,18 @@ const Location = props => {
     }
 
     function getRainChance(locationInArray){
+        // console.log(forecast['forecast-period'][locationInArray]['text']['1']['_'])
         return forecast['forecast-period'][locationInArray]['text']['1']['_'].replace("%","")
+    }
+
+    function getLow(locationInArray){
+        console.log(forecast['forecast-period'][locationInArray]['element']['1']['_'])
+        return forecast['forecast-period'][locationInArray]['element']['1']['_']
+    }
+
+    function getHigh(locationInArray){
+        // console.log(forecast['forecast-period'][locationInArray]['element']['2']['_'])
+        return forecast['forecast-period'][locationInArray]['element']['2']['_']
     }
 
     function getEmoji(locationInArray){
@@ -99,8 +111,8 @@ const Location = props => {
                         yDomain={[0, 100]}>
                         <VerticalGridLines />
                         <HorizontalGridLines />
-                        <XAxis />
-                        <YAxis title="chance of rain as %" />
+                        <XAxis/>
+                        <YAxis tickFormat={v => `${v}%`} />
                         <VerticalBarSeries data={[
                             {x: 'Today', y: getRainChance(0)},
                             {x: getDays(1), y: getRainChance(1)},
@@ -118,18 +130,44 @@ const Location = props => {
 
                     <div>
 
-                    <XYPlot width={300} height={300}>
+                    <XYPlot width={900} height={300} xType="ordinal">
                         <VerticalGridLines />
                         <HorizontalGridLines />
-                        <XAxis />
-                        <YAxis />
+                        <XAxis 
+                            // tickFormat={(t, i) => {
+                            //     if ((i % 2) === 0) {
+                            //     return t.split(',')[0];
+                            //     } else {
+                            //     return;
+                            //     }
+                            // }} 
+                            // style={{marginBottom: '50px'}} 
+                            />
+                        <YAxis 
+                            // tickFormat={v => `${v}°C` }
+                        />
                         <LineSeries
                             style={{
                             strokeWidth: '3px'
                             }}
-                            lineStyle={{stroke: 'red'}}
-                            markStyle={{stroke: 'blue'}}
-                            data={[{x: 1, y: 10}, {x: 2, y: 5}]}
+                            // curve={'curveMonotoneX'}
+                            // lineStyle={{stroke: 'red'}}
+                            // markStyle={{stroke: 'blue'}}
+                            data={[
+                                {x: 'Today', y: getLow(0)}, 
+                                {x: 'Tonight', y: getLow(1)}, 
+                                {x: `${getDays(1)}`, y: getHigh(1)},
+                                {x: `${getDays(1)} night`, y: getLow(2)},
+                                {x: `${getDays(2)}`, y: getHigh(2)},
+                                {x: `${getDays(2)} night`, y: getLow(3)},
+                                {x: `${getDays(3)}`, y: getHigh(3)},
+                                {x: `${getDays(3)} night`, y: getLow(4)},
+                                {x: `${getDays(4)}`, y: getHigh(4)},
+                                {x: `${getDays(4)} night`, y: getLow(5)},
+                                {x: `${getDays(5)}`, y: getHigh(5)},
+                                {x: `${getDays(5)} night`, y: getLow(6)},
+                                {x: `${getDays(6)}`, y: getHigh(6)}
+                            ]}
                         />
                        
                     </XYPlot>
