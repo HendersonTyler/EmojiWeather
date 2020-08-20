@@ -29,6 +29,10 @@ const Location = props => {
         return weekday[numberOfDay];
     }
 
+    function getRainChance(locationInArray){
+        return forecast['forecast-period'][locationInArray]['text']['1']['_'].replace("%","")
+    }
+
     function getEmoji(locationInArray){
         const fullForecast = forecast['forecast-period'][locationInArray]['text']['0']['_'].toLowerCase();
         if (fullForecast.includes('sunny')){
@@ -45,21 +49,15 @@ const Location = props => {
             return <span role='img' aria-label='fog' className="text-center">🌫</span>;
         } else if (fullForecast.includes('frost')) {
             return <span role='img' aria-label='frost' className="text-center">❄</span>;
+        } else if (fullForecast.includes('windy')) {
+            return <span role='img' aria-label='wind' className="text-center">💨</span>;
+        } else if (fullForecast.includes('dust')) {
+            return <span role='img' aria-label='wind' className="text-center">🌵</span>;
         } else {
             return <span role='img' aria-label='thumb' className='text-center'>👎</span>
         }
     }
-    const myData = [
-        {x: 'Monday', y: 100},
-        {x: 'Tuesday', y: 0},
-        {x: 'Wednesday', y: 50},
-        {x: 'Thursday', y: 20},
-        {x: 'Friday', y: 6},
-        {x: 'Saturday', y: 92},
-        {x: 'Sunday', y: 10},
-      
-
-      ];
+    
     
 
     return (
@@ -98,12 +96,20 @@ const Location = props => {
                         xType="ordinal"
                         width={900}
                         height={400}
-                        xDistance={100}>
+                        yDomain={[0, 100]}>
                         <VerticalGridLines />
                         <HorizontalGridLines />
                         <XAxis />
-                        <YAxis />
-                        <VerticalBarSeries data={myData} />
+                        <YAxis title="chance of rain as %" />
+                        <VerticalBarSeries data={[
+                            {x: 'Today', y: getRainChance(0)},
+                            {x: getDays(1), y: getRainChance(1)},
+                            {x: getDays(2), y: getRainChance(2)},
+                            {x: getDays(3), y: getRainChance(3)},
+                            {x: getDays(4), y: getRainChance(4)},
+                            {x: getDays(5), y: getRainChance(5)},
+                            {x: getDays(6), y: getRainChance(6)}
+                            ]} />
                         <LabelSeries />
                     </XYPlot>
                     </div>
@@ -123,7 +129,7 @@ const Location = props => {
                             }}
                             lineStyle={{stroke: 'red'}}
                             markStyle={{stroke: 'blue'}}
-                            data={[{x: 1, y: 10}, {x: 2, y: 5}, {x: 3, y: 15}]}
+                            data={[{x: 1, y: 10}, {x: 2, y: 5}]}
                         />
                        
                     </XYPlot>
