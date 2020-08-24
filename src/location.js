@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {XYPlot, VerticalBarSeries, LabelSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxis, LineSeries} from 'react-vis';
 import 'react-vis/dist/style.css';
+import { ToastBody } from "react-bootstrap";
 
+
+var temp = [];
+var forecast = {};
 
 const Location = props => {
     const city = props.city;
-    const [forecast, setForecast] = useState();
-
+    const [ready, setReady] = useState(false);
+    var rainChance = [];
+    
     useEffect(() => {
     fetch("http://localhost:8000/town/" + city )
     .then(response => {
@@ -16,10 +21,25 @@ const Location = props => {
         return response.json();
     })
     .then(json => {
-        setForecast(json);
-        console.log(json)
+        forecast = json;
+        return json
+    }) // Get chance of rain
+    // .then( data => {
+    //     console.log(getRainChance(2))
+    //     rainChance.push({x: getDays(1), y: getRainChance(1)});
+    //     rainChance.push({x: getDays(2), y: getRainChance(2)});
+    //     rainChance.push({x: getDays(3), y: getRainChance(3)});
+    //     console.log(rainChance)
+        
+    // }) // Get Temp
+    // .then( data =>  {
+    //     return true;
+
+    // })
+    .then ( weAre => {
+        setReady(weAre);
     });        
-    }, [city])
+    }, [city, setReady])
 
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -30,19 +50,33 @@ const Location = props => {
         return weekday[numberOfDay];
     }
 
+    // Add loop searching for name.
+
     function getRainChance(locationInArray){
-        // console.log(forecast['forecast-period'][locationInArray]['text']['1']['_'])
-        return forecast['forecast-period'][locationInArray]['text']['1']['_'].replace("%","")
+        for ( const x of forecast['forecast-period'][locationInArray]['text'])   {
+            if (x['$']['type'] === 'probability_of_precipitation') {
+                return x['_'].replace("%","")
+            }
+        }   
     }
+    
 
     function getLow(locationInArray){
-        console.log(forecast['forecast-period'][locationInArray]['element']['1']['_'])
-        return forecast['forecast-period'][locationInArray]['element']['1']['_']
+        forecast['forecast-period'][locationInArray]['element'].forEach(obj => {
+            if (obj['$']['type'] === 'air_temperature_minimum'){
+                 console.log(typeof obj['_']);
+                 return obj['_'];
+            }
+        })
     }
 
     function getHigh(locationInArray){
-        // console.log(forecast['forecast-period'][locationInArray]['element']['2']['_'])
-        return forecast['forecast-period'][locationInArray]['element']['2']['_']
+        forecast['forecast-period'][locationInArray]['element'].forEach(obj => {
+            if (obj['$']['type'] === 'air_temperature_maximum'){
+                console.log(obj['_'])
+                return obj['_'];
+            } 
+        })
     }
 
     function getEmoji(locationInArray){
@@ -74,7 +108,7 @@ const Location = props => {
 
     return (
         <div>
-            {forecast ? (
+            {ready ? (
                 <div>
                     <div className="text-center pb-5"><h1 className=" display-1">{ forecast['$']['description'] }</h1></div>
                     <table className="table">
@@ -91,7 +125,7 @@ const Location = props => {
                         </thead>
                         <tbody>
                             <tr>
-                            <th scope="row"> {getEmoji(0)}</th>
+                            <th scope="row">{ getEmoji(0) }</th>
                             <th scope="col">{ getEmoji(1) }</th>
                             <th scope="col">{ getEmoji(2) }</th>
                             <th scope="col">{ getEmoji(3) }</th>
@@ -113,7 +147,10 @@ const Location = props => {
                         <HorizontalGridLines />
                         <XAxis/>
                         <YAxis tickFormat={v => `${v}%`} />
-                        <VerticalBarSeries data={[
+                        <VerticalBarSeries 
+                            data=
+                            // {rainChance}
+                            {[
                             {x: 'Today', y: getRainChance(0)},
                             {x: getDays(1), y: getRainChance(1)},
                             {x: getDays(2), y: getRainChance(2)},
@@ -121,7 +158,8 @@ const Location = props => {
                             {x: getDays(4), y: getRainChance(4)},
                             {x: getDays(5), y: getRainChance(5)},
                             {x: getDays(6), y: getRainChance(6)}
-                            ]} />
+                            ]} 
+                            />
                         <LabelSeries />
                     </XYPlot>
                     </div>
@@ -129,48 +167,57 @@ const Location = props => {
                     <div className="text-center pt-4"><h2>🌡</h2></div>
 
                     <div>
-
+{/* 
                     <XYPlot width={900} height={300} xType="ordinal">
                         <VerticalGridLines />
                         <HorizontalGridLines />
                         <XAxis 
-                            // tickFormat={(t, i) => {
-                            //     if ((i % 2) === 0) {
-                            //     return t.split(',')[0];
-                            //     } else {
-                            //     return;
-                            //     }
-                            // }} 
-                            // style={{marginBottom: '50px'}} 
+                            tickFormat={(t, i) => {
+                                if ((i % 2) === 0) {
+                                return t.split(',')[0];
+                                } else {
+                                return;
+                                }
+                            }} 
+                            style={{marginBottom: '50px'}} 
                             />
                         <YAxis 
-                            // tickFormat={v => `${v}°C` }
+                            tickFormat={v => `${v}°C` }
                         />
                         <LineSeries
                             style={{
                             strokeWidth: '3px'
                             }}
-                            // curve={'curveMonotoneX'}
-                            // lineStyle={{stroke: 'red'}}
-                            // markStyle={{stroke: 'blue'}}
+                            curve={'curveMonotoneX'}
+                            lineStyle={{stroke: 'red'}}
+                            markStyle={{stroke: 'blue'}}
+                            // data={[
+                            //     {x: 'Today', y: getHigh(0)}, 
+                            //     {x: 'Tonight', y: getLow(1)}, 
+                            //     {x: `${getDays(1)}`, y: getHigh(1)},
+                            //     {x: `${getDays(1)} night`, y: getLow(2)},
+                            //     {x: `${getDays(2)}`, y: getHigh(2)},
+                            //     {x: `${getDays(2)} night`, y: getLow(3)},
+                            //     {x: `${getDays(3)}`, y: getHigh(3)},
+                            //     {x: `${getDays(3)} night`, y: getLow(4)},
+                            //     {x: `${getDays(4)}`, y: getHigh(4)},
+                            //     {x: `${getDays(4)} night`, y: getLow(5)},
+                            //     {x: `${getDays(5)}`, y: getHigh(5)},
+                            //     {x: `${getDays(5)} night`, y: getLow(6)},
+                            //     {x: `${getDays(6)}`, y: getHigh(6)}
+                            // ]}
                             data={[
-                                {x: 'Today', y: getLow(0)}, 
-                                {x: 'Tonight', y: getLow(1)}, 
-                                {x: `${getDays(1)}`, y: getHigh(1)},
-                                {x: `${getDays(1)} night`, y: getLow(2)},
-                                {x: `${getDays(2)}`, y: getHigh(2)},
-                                {x: `${getDays(2)} night`, y: getLow(3)},
-                                {x: `${getDays(3)}`, y: getHigh(3)},
-                                {x: `${getDays(3)} night`, y: getLow(4)},
-                                {x: `${getDays(4)}`, y: getHigh(4)},
-                                {x: `${getDays(4)} night`, y: getLow(5)},
-                                {x: `${getDays(5)}`, y: getHigh(5)},
-                                {x: `${getDays(5)} night`, y: getLow(6)},
-                                {x: `${getDays(6)}`, y: getHigh(6)}
+                                
+                                
+                                {x: `${getDays(1)} night`, y: '5'},
+                                {x: `${getDays(2)}`, y: getLow(3)},
+                                {x: `${getDays(3)}`, y: '5'}
+                                
+                              
                             ]}
                         />
                        
-                    </XYPlot>
+                    </XYPlot> */}
                     </div>
 
                 </div>
