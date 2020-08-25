@@ -11,7 +11,7 @@ const Location = props => {
     const [ready, setReady] = useState(false);
     
     useEffect(() => {
-    fetch("http://localhost:8000/town/" + city )
+    fetch("http://sweet-source.bnr.la:8000/town/" + city )
     .then(response => {
         if (!response.ok) {
             throw new Error('HTTP error ' + response.status);
