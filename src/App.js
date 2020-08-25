@@ -35,24 +35,24 @@ const App = () => {
   }, [vantaEffect])
 
   return (
-    <div>
+    
       
-      <div className="overflowauto" ref={myRef}>
-        <div className="container overflowauto w-100 vh-100">
-          <nav className="navbar navbar-light">
-            <div className="navbar-brand">
-              <Link to="">
-                ⛈ Emoji Forecast   
-                </Link> 
-            </div>
-          </nav>
-            <Router>
-              <Home path="/" />
-              <Location path="/town/:city" />
-            </Router>
-        </div>
+    <div className="vh-100" ref={myRef}>
+      <div className="container">
+        <nav className="navbar navbar-light">
+          <div className="navbar-brand">
+            <Link to="">
+              ⛈ Emoji Forecast   
+              </Link> 
+          </div>
+        </nav>
+          <Router>
+            <Home path="/" />
+            <Location path="/town/:city" />
+          </Router>
       </div>
     </div>
+    
         
   );
 }

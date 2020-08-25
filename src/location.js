@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {XYPlot, VerticalBarSeries, LabelSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxis, LineSeries} from 'react-vis';
 import 'react-vis/dist/style.css';
-import { ToastBody } from "react-bootstrap";
 
 
-var temp = [];
+
 var forecast = {};
 
 const Location = props => {
     const city = props.city;
     const [ready, setReady] = useState(false);
-    var rainChance = [];
     
     useEffect(() => {
     fetch("http://localhost:8000/town/" + city )
@@ -23,19 +21,7 @@ const Location = props => {
     .then(json => {
         forecast = json;
         return json
-    }) // Get chance of rain
-    // .then( data => {
-    //     console.log(getRainChance(2))
-    //     rainChance.push({x: getDays(1), y: getRainChance(1)});
-    //     rainChance.push({x: getDays(2), y: getRainChance(2)});
-    //     rainChance.push({x: getDays(3), y: getRainChance(3)});
-    //     console.log(rainChance)
-        
-    // }) // Get Temp
-    // .then( data =>  {
-    //     return true;
-
-    // })
+    }) 
     .then ( weAre => {
         setReady(weAre);
     });        
@@ -53,30 +39,28 @@ const Location = props => {
     // Add loop searching for name.
 
     function getRainChance(locationInArray){
-        for ( const x of forecast['forecast-period'][locationInArray]['text'])   {
+        for (const x of forecast['forecast-period'][locationInArray]['text']){
             if (x['$']['type'] === 'probability_of_precipitation') {
-                return x['_'].replace("%","")
+                return x['_'].replace("%","");
             }
         }   
     }
     
 
     function getLow(locationInArray){
-        forecast['forecast-period'][locationInArray]['element'].forEach(obj => {
-            if (obj['$']['type'] === 'air_temperature_minimum'){
-                 console.log(typeof obj['_']);
-                 return obj['_'];
+        for (const x of forecast['forecast-period'][locationInArray]['element']){
+            if (x['$']['type'] === 'air_temperature_minimum'){
+                return x['_'];
             }
-        })
+        }
     }
 
     function getHigh(locationInArray){
-        forecast['forecast-period'][locationInArray]['element'].forEach(obj => {
-            if (obj['$']['type'] === 'air_temperature_maximum'){
-                console.log(obj['_'])
-                return obj['_'];
-            } 
-        })
+        for (const x of forecast['forecast-period'][locationInArray]['element']){
+            if (x['$']['type'] === 'air_temperature_maximum'){
+                return x['_'];
+            }
+        }
     }
 
     function getEmoji(locationInArray){
@@ -137,7 +121,7 @@ const Location = props => {
                     </table>
 
                     <div className="text-center pt-4"><h2>Chance of 🌧</h2></div>
-                    <div>
+                    <div className="pb-5">
                     <XYPlot animation
                         xType="ordinal"
                         width={900}
@@ -148,9 +132,7 @@ const Location = props => {
                         <XAxis/>
                         <YAxis tickFormat={v => `${v}%`} />
                         <VerticalBarSeries 
-                            data=
-                            // {rainChance}
-                            {[
+                            data={[
                             {x: 'Today', y: getRainChance(0)},
                             {x: getDays(1), y: getRainChance(1)},
                             {x: getDays(2), y: getRainChance(2)},
@@ -166,9 +148,9 @@ const Location = props => {
 
                     <div className="text-center pt-4"><h2>🌡</h2></div>
 
-                    <div>
-{/* 
-                    <XYPlot width={900} height={300} xType="ordinal">
+                    <div className="justify-content-center pb-5">
+ 
+                    <XYPlot width={900} height={500} xType="ordinal" yDomain={[-10, 40]}>
                         <VerticalGridLines />
                         <HorizontalGridLines />
                         <XAxis 
@@ -191,33 +173,32 @@ const Location = props => {
                             curve={'curveMonotoneX'}
                             lineStyle={{stroke: 'red'}}
                             markStyle={{stroke: 'blue'}}
+                            data=
+                            {[ 
+                                {x: `${getDays(1)}`, y: getHigh(1)},
+                                {x: `${getDays(1)} night`, y: getLow(2)},
+                                {x: `${getDays(2)}`, y: getHigh(2)},
+                                {x: `${getDays(2)} night`, y: getLow(3)},
+                                {x: `${getDays(3)}`, y: getHigh(3)},
+                                {x: `${getDays(3)} night`, y: getLow(4)},
+                                {x: `${getDays(4)}`, y: getHigh(4)},
+                                {x: `${getDays(4)} night`, y: getLow(5)},
+                                {x: `${getDays(5)}`, y: getHigh(5)},
+                                {x: `${getDays(5)} night`, y: getLow(6)},
+                                {x: `${getDays(6)}`, y: getHigh(6)}
+                            ]}
                             // data={[
-                            //     {x: 'Today', y: getHigh(0)}, 
-                            //     {x: 'Tonight', y: getLow(1)}, 
-                            //     {x: `${getDays(1)}`, y: getHigh(1)},
-                            //     {x: `${getDays(1)} night`, y: getLow(2)},
-                            //     {x: `${getDays(2)}`, y: getHigh(2)},
-                            //     {x: `${getDays(2)} night`, y: getLow(3)},
-                            //     {x: `${getDays(3)}`, y: getHigh(3)},
-                            //     {x: `${getDays(3)} night`, y: getLow(4)},
-                            //     {x: `${getDays(4)}`, y: getHigh(4)},
-                            //     {x: `${getDays(4)} night`, y: getLow(5)},
-                            //     {x: `${getDays(5)}`, y: getHigh(5)},
-                            //     {x: `${getDays(5)} night`, y: getLow(6)},
-                            //     {x: `${getDays(6)}`, y: getHigh(6)}
-                            // ]}
-                            data={[
                                 
                                 
-                                {x: `${getDays(1)} night`, y: '5'},
-                                {x: `${getDays(2)}`, y: getLow(3)},
-                                {x: `${getDays(3)}`, y: '5'}
+                            //     {x: `${getDays(1)} night`, y: '5'},
+                            //     {x: `${getDays(2)}`, y: getLow(3)},
+                            //     {x: `${getDays(3)}`, y: getHigh(4)}
                                 
                               
-                            ]}
+                            // ]}
                         />
                        
-                    </XYPlot> */}
+                    </XYPlot> 
                     </div>
 
                 </div>
